@@ -457,8 +457,8 @@ def colmap_to_json(
             frame["depth_file_path"] = str(depth_path.relative_to(depth_path.parent.parent))
         frames.append(frame)
 
-    if set(cam_id_to_camera.keys()) != {1}:
-        raise RuntimeError("Only single camera shared for all images is supported.")
+    #if set(cam_id_to_camera.keys()) != {1}:
+    #    raise RuntimeError("Only single camera shared for all images is supported.")
     out = parse_colmap_camera_params(cam_id_to_camera[1])
     out["frames"] = frames
 

@@ -58,7 +58,7 @@ CAMERA_MODELS = {
 }
 
 
-def list_images(data: Path, recursive: bool = False) -> List[Path]:
+def list_images(data: Path, recursive: bool = True) -> List[Path]:
     """Lists all supported images in a directory
 
     Args:
@@ -281,7 +281,6 @@ def copy_images_list(
         except shutil.SameFileError:
             pass
         copied_image_paths.append(copied_image_path)
-
     nn_flag = "" if not nearest_neighbor else ":flags=neighbor"
     downscale_chains = [f"[t{i}]scale=iw/{2**i}:ih/{2**i}{nn_flag}[out{i}]" for i in range(num_downscales + 1)]
     downscale_dirs = [Path(str(image_dir) + (f"_{2**i}" if i > 0 else "")) for i in range(num_downscales + 1)]
@@ -334,7 +333,6 @@ def copy_images_list(
         CONSOLE.log("[bold red]:skull: No usable images in the data folder.")
     else:
         CONSOLE.log(f"[bold green]:tada: Done copying images with prefix '{image_prefix}'.")
-
     return copied_image_paths
 
 

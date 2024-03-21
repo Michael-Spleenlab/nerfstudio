@@ -25,6 +25,8 @@ import shutil
 import struct
 import sys
 from contextlib import ExitStack, contextmanager
+import cv2
+from contextlib import ExitStack
 from dataclasses import dataclass, field
 from pathlib import Path
 from typing import Any, Dict, List, Literal, Optional, Union
@@ -220,6 +222,7 @@ def _render_trajectory_video(
                             .cpu()
                             .numpy()
                         )
+                        output_image = (output_image * 10000/255).astype(np.uint16)
                     else:
                         output_image = (
                             colormaps.apply_colormap(
@@ -255,7 +258,7 @@ def _render_trajectory_video(
                 render_image = np.concatenate(render_image, axis=1)
                 if output_format == "images":
                     if image_format == "png":
-                        media.write_image(output_image_dir / f"{camera_idx:05d}.png", render_image, fmt="png")
+                        cv2.imwrite(str(output_image_dir / f"{camera_idx:05d}.png"), render_image*255)
                     if image_format == "jpeg":
                         media.write_image(
                             output_image_dir / f"{camera_idx:05d}.jpg", render_image, fmt="jpeg", quality=jpeg_quality
